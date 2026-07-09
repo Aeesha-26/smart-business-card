@@ -9,8 +9,8 @@ import { saveToPhonebook, isContactSaved, removeFromPhonebook } from "@/lib/phon
 import SaveContactSheet from "@/components/SaveContactSheet";
 import FeedbackForm from "@/components/FeedbackForm";
 
-function buildMailtoHref(email: string): string {
-  return `mailto:${email.trim()}`;
+function buildGmailComposeHref(email: string): string {
+  return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email.trim())}`;
 }
 
 function buildTelHref(phone: string): string {
@@ -116,7 +116,7 @@ export default function PublicCard() {
 
   const contactItems: { icon: typeof Phone; label: string; value: string | null; href?: string; fieldKey: string; buttonLabel?: string }[] = [
     { icon: Phone, label: "Phone", value: phone, href: phone ? buildTelHref(phone) : undefined, fieldKey: "phone" },
-    { icon: Mail, label: "Email", value: email, href: email ? buildMailtoHref(email) : undefined, fieldKey: "email" },
+    { icon: Mail, label: "Email", value: email, href: email ? buildGmailComposeHref(email) : undefined, fieldKey: "email" },
     { icon: Globe, label: "Website", value: website, href: website ? buildWebsiteHref(website) : undefined, fieldKey: "website", buttonLabel: "visit organzation website" },
     { icon: MapPin, label: "Address", value: address, fieldKey: "address" },
   ];
@@ -238,6 +238,9 @@ export default function PublicCard() {
                     <a
                       href={item.href}
                       className="text-sm font-medium text-foreground hover:opacity-70 truncate block transition-opacity"
+                      {...(item.fieldKey === "email"
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
                     >
                       {item.value}
                     </a>
