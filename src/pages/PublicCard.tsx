@@ -2,11 +2,26 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Phone, Mail, Globe, MapPin, Linkedin, Instagram, Twitter, UserPlus, BookUser } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { downloadVCard } from "@/lib/vcard";
 import { saveToPhonebook, isContactSaved, removeFromPhonebook } from "@/lib/phonebook";
 import SaveContactSheet from "@/components/SaveContactSheet";
 import FeedbackForm from "@/components/FeedbackForm";
+
+function buildMailtoHref(email: string): string {
+  return `mailto:${email.trim()}`;
+}
+
+function buildTelHref(phone: string): string {
+  return `tel:${phone.replace(/[\s().-]/g, "")}`;
+}
+
+function buildWebsiteHref(url: string): string {
+  const trimmed = url.trim();
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  return `https://${trimmed}`;
+}
 
 interface CardData {
   id: string;
@@ -94,11 +109,16 @@ export default function PublicCard() {
 
   const vf = card.visible_fields;
 
+  const phone = card.phone?.trim() || null;
+  const email = card.email?.trim() || null;
+  const website = card.website?.trim() || null;
+  const address = card.address?.trim() || null;
+
   const contactItems: { icon: typeof Phone; label: string; value: string | null; href?: string; fieldKey: string; buttonLabel?: string }[] = [
-    { icon: Phone, label: "Phone", value: card.phone, href: card.phone ? `tel:${card.phone}` : undefined, fieldKey: "phone", buttonLabel: "place a call" },
-    { icon: Mail, label: "Email", value: card.email, href: card.email ? `mailto:${card.email}` : undefined, fieldKey: "email", buttonLabel: "send an email" },
-    { icon: Globe, label: "Website", value: card.website, href: card.website || undefined, fieldKey: "website", buttonLabel: "visit organzation website" },
-    { icon: MapPin, label: "Address", value: card.address, fieldKey: "address" },
+    { icon: Phone, label: "Phone", value: phone, href: phone ? buildTelHref(phone) : undefined, fieldKey: "phone" },
+    { icon: Mail, label: "Email", value: email, href: email ? buildMailtoHref(email) : undefined, fieldKey: "email" },
+    { icon: Globe, label: "Website", value: website, href: website ? buildWebsiteHref(website) : undefined, fieldKey: "website", buttonLabel: "visit organzation website" },
+    { icon: MapPin, label: "Address", value: address, fieldKey: "address" },
   ];
 
   const socialItems = [
@@ -203,16 +223,26 @@ export default function PublicCard() {
                 <div className="min-w-0">
                   <p className="text-xs text-muted-foreground">{item.label}</p>
                   {item.href ? (
-                    <Button variant="outline" size="sm" className="mt-1 h-8 px-3 text-xs font-semibold" asChild>
+                    item.fieldKey === "website" ? (
                       <a
                         href={item.href}
-                        {...(item.fieldKey === "website"
-                          ? { target: "_blank", rel: "noopener noreferrer" }
-                          : {})}
+                        className={cn(
+                          buttonVariants({ variant: "outline", size: "sm" }),
+                          "mt-1 h-8 px-3 text-xs font-semibold"
+                        )}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
                         {item.buttonLabel}
                       </a>
-                    </Button>
+                    ) : (
+                      <a
+                        href={item.href}
+                        className="text-sm font-medium text-foreground hover:opacity-70 truncate block transition-opacity"
+                      >
+                        {item.value}
+                      </a>
+                    )
                   ) : (
                     <p className="text-sm font-medium text-foreground truncate">{item.value}</p>
                   )}
