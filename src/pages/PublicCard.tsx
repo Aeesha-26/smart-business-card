@@ -94,10 +94,10 @@ export default function PublicCard() {
 
   const vf = card.visible_fields;
 
-  const contactItems: { icon: typeof Phone; label: string; value: string | null; href?: string; fieldKey: string }[] = [
-    { icon: Phone, label: "Phone", value: card.phone, href: card.phone ? `tel:${card.phone}` : undefined, fieldKey: "phone" },
-    { icon: Mail, label: "Email", value: card.email, href: card.email ? `mailto:${card.email}` : undefined, fieldKey: "email" },
-    { icon: Globe, label: "Website", value: card.website, href: card.website || undefined, fieldKey: "website" },
+  const contactItems: { icon: typeof Phone; label: string; value: string | null; href?: string; fieldKey: string; buttonLabel?: string }[] = [
+    { icon: Phone, label: "Phone", value: card.phone, href: card.phone ? `tel:${card.phone}` : undefined, fieldKey: "phone", buttonLabel: "Call" },
+    { icon: Mail, label: "Email", value: card.email, href: card.email ? `mailto:${card.email}` : undefined, fieldKey: "email", buttonLabel: "Email" },
+    { icon: Globe, label: "Website", value: card.website, href: card.website || undefined, fieldKey: "website", buttonLabel: "Visit Website" },
     { icon: MapPin, label: "Address", value: card.address, fieldKey: "address" },
   ];
 
@@ -203,9 +203,16 @@ export default function PublicCard() {
                 <div className="min-w-0">
                   <p className="text-xs text-muted-foreground">{item.label}</p>
                   {item.href ? (
-                    <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-foreground hover:opacity-70 truncate block transition-opacity">
-                      {item.value}
-                    </a>
+                    <Button variant="outline" size="sm" className="mt-1 h-8 px-3 text-xs font-semibold" asChild>
+                      <a
+                        href={item.href}
+                        {...(item.fieldKey === "website"
+                          ? { target: "_blank", rel: "noopener noreferrer" }
+                          : {})}
+                      >
+                        {item.buttonLabel}
+                      </a>
+                    </Button>
                   ) : (
                     <p className="text-sm font-medium text-foreground truncate">{item.value}</p>
                   )}

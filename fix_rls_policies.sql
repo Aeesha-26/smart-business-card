@@ -26,6 +26,8 @@ DROP POLICY IF EXISTS "admin_update_all" ON profiles;
 DROP POLICY IF EXISTS "profiles_select_policy" ON profiles;
 DROP POLICY IF EXISTS "profiles_update_policy" ON profiles;
 DROP POLICY IF EXISTS "profiles_insert_policy" ON profiles;
+DROP POLICY IF EXISTS "Admins can read all profiles" ON profiles;
+DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
 
 -- Step 3: Recreate policies using the SECURITY DEFINER function
 -- (this avoids the recursion by not querying profiles inside a profiles policy)
