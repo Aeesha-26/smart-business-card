@@ -96,7 +96,7 @@ export default function PublicCard() {
 
   const contactItems: { icon: typeof Phone; label: string; value: string | null; href?: string; fieldKey: string; buttonLabel?: string }[] = [
     { icon: Phone, label: "Phone", value: card.phone, href: card.phone ? `tel:${card.phone}` : undefined, fieldKey: "phone", buttonLabel: "place a call" },
-    { icon: Mail, label: "Email", value: card.email, href: card.email ? `mailto:${card.email}` : undefined, fieldKey: "email", buttonLabel: "send a email" },
+    { icon: Mail, label: "Email", value: card.email, href: card.email ? `mailto:${card.email}` : undefined, fieldKey: "email", buttonLabel: "send an email" },
     { icon: Globe, label: "Website", value: card.website, href: card.website || undefined, fieldKey: "website", buttonLabel: "visit organzation website" },
     { icon: MapPin, label: "Address", value: card.address, fieldKey: "address" },
   ];
