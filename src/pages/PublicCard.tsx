@@ -95,9 +95,9 @@ export default function PublicCard() {
   const vf = card.visible_fields;
 
   const contactItems: { icon: typeof Phone; label: string; value: string | null; href?: string; fieldKey: string; buttonLabel?: string }[] = [
-    { icon: Phone, label: "Phone", value: card.phone, href: card.phone ? `tel:${card.phone}` : undefined, fieldKey: "phone", buttonLabel: "Call" },
-    { icon: Mail, label: "Email", value: card.email, href: card.email ? `mailto:${card.email}` : undefined, fieldKey: "email", buttonLabel: "Email" },
-    { icon: Globe, label: "Website", value: card.website, href: card.website || undefined, fieldKey: "website", buttonLabel: "Visit Website" },
+    { icon: Phone, label: "Phone", value: card.phone, href: card.phone ? `tel:${card.phone}` : undefined, fieldKey: "phone", buttonLabel: "place a call" },
+    { icon: Mail, label: "Email", value: card.email, href: card.email ? `mailto:${card.email}` : undefined, fieldKey: "email", buttonLabel: "send a email" },
+    { icon: Globe, label: "Website", value: card.website, href: card.website || undefined, fieldKey: "website", buttonLabel: "visit organzation website" },
     { icon: MapPin, label: "Address", value: card.address, fieldKey: "address" },
   ];
 
