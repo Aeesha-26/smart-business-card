@@ -9,14 +9,6 @@ import { saveToPhonebook, isContactSaved, removeFromPhonebook } from "@/lib/phon
 import SaveContactSheet from "@/components/SaveContactSheet";
 import FeedbackForm from "@/components/FeedbackForm";
 
-function buildMailtoHref(email: string): string {
-  return `mailto:${email.trim()}`;
-}
-
-function buildTelHref(phone: string): string {
-  return `tel:${phone.replace(/[\s().-]/g, "")}`;
-}
-
 function buildWebsiteHref(url: string): string {
   const trimmed = url.trim();
   if (/^https?:\/\//i.test(trimmed)) return trimmed;
@@ -115,8 +107,8 @@ export default function PublicCard() {
   const address = card.address?.trim() || null;
 
   const contactItems: { icon: typeof Phone; label: string; value: string | null; href?: string; fieldKey: string; buttonLabel?: string }[] = [
-    { icon: Phone, label: "Phone", value: phone, href: phone ? buildTelHref(phone) : undefined, fieldKey: "phone" },
-    { icon: Mail, label: "Email", value: email, href: email ? buildMailtoHref(email) : undefined, fieldKey: "email" },
+    { icon: Phone, label: "Phone", value: phone, fieldKey: "phone" },
+    { icon: Mail, label: "Email", value: email, fieldKey: "email" },
     { icon: Globe, label: "Website", value: website, href: website ? buildWebsiteHref(website) : undefined, fieldKey: "website", buttonLabel: "visit organzation website" },
     { icon: MapPin, label: "Address", value: address, fieldKey: "address" },
   ];
@@ -222,27 +214,18 @@ export default function PublicCard() {
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs text-muted-foreground">{item.label}</p>
-                  {item.href ? (
-                    item.fieldKey === "website" ? (
-                      <a
-                        href={item.href}
-                        className={cn(
-                          buttonVariants({ variant: "outline", size: "sm" }),
-                          "mt-1 h-8 px-3 text-xs font-semibold"
-                        )}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {item.buttonLabel}
-                      </a>
-                    ) : (
-                      <a
-                        href={item.href}
-                        className="text-sm font-medium text-foreground hover:opacity-70 truncate block transition-opacity"
-                      >
-                        {item.value}
-                      </a>
-                    )
+                  {item.href && item.fieldKey === "website" ? (
+                    <a
+                      href={item.href}
+                      className={cn(
+                        buttonVariants({ variant: "outline", size: "sm" }),
+                        "mt-1 h-8 px-3 text-xs font-semibold"
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {item.buttonLabel}
+                    </a>
                   ) : (
                     <p className="text-sm font-medium text-foreground truncate">{item.value}</p>
                   )}
